@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.guanrong.xmxj_android.activity.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/fragment_content"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:background="#fff5f5dc">
+
+            <LinearLayout
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:background="#fff5f5dc"
+                android:onClick="dayli_click"
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <ImageButton
+                    android:layout_width="30dp"
+                    android:layout_height="28dp"
+                    android:layout_marginTop="2dp"
+                    android:onClick="dayli_click"
+                    android:layout_gravity="center"
+                    android:background="#fff5f5dc"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/twod" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:id="@+id/text_home"
+                    android:text="日常"
+                    android:textColor="#ff000000"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:background="#fff5f5dc"
+                android:orientation="vertical"
+                android:onClick="ziliao_click"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_gravity="center"
+                    android:onClick="ziliao_click"
+                    android:background="#fff5f5dc"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/evaluate_icon" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:id="@+id/text_cp"
+                    android:text="统计"
+                    android:textColor="#ff000000"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:background="#fff5f5dc"
+                android:orientation="vertical"
+                android:onClick="fenxiangquan_click"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_gravity="center"
+                    android:onClick="fenxiangquan_click"
+                    android:background="#fff5f5dc"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/pyq" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:id="@+id/text_tz"
+                    android:text="工作周报"
+                    android:textColor="#ff000000"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:background="#fff5f5dc"
+                android:orientation="vertical"
+                android:onClick="my_click"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_gravity="center"
+                    android:onClick="my_click"
+                    android:background="#fff5f5dc"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/my" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:id="@+id/text_my"
+                    android:text="我的"
+                    android:textColor="#ff000000"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

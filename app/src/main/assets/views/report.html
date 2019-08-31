@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>new</title>
+    <link rel="stylesheet" href="../js/index.css">
+    <link rel="stylesheet" href="../js/bootstrap.css">
+    <script src="../js/vue.js"></script>
+    <script src="../js/element-ui.js"></script>
+    <script src="../js/jquery.js"></script>
+    <script src="../js/axios.js"></script>
+    <script src="../js/dist/qs.js"></script>
+
+</head>
+<body>
+<div id="app">
+
+    <br>
+        <hr>
+        <el-form ref="detailForm"  style="background-color: #fff;padding-top: 10px;padding-bottom: 10px"
+                 :model="report" label-width="100px">
+            <el-form-item label="选择周报">
+                <el-select v-model="reportIndex" @change="reportChange" placeholder="请选择" >
+                    <el-option
+                            v-for="(item,index) in reports"
+                            :label="item.createDate"
+                            :key="item.reportId"
+                            :value="index">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item label="姓 名" prop="name">
+                <el-input
+                        disabled
+                        v-model="sysUser.name"
+                        style="width: 90%"></el-input>
+            </el-form-item>
+            <el-form-item label="时 间" prop="phone">
+                <el-input
+                        disabled
+                        v-model="report.createDate"
+                        style="width: 90%"></el-input>
+            </el-form-item>
+            <el-form-item label="周 报">
+                <el-input
+                        disabled
+                        style="width: 90%"
+                        type="textarea"
+                        :autosize="{ minRows: 4, maxRows: 8}"
+                        placeholder="请输入内容"
+                        v-model="report.report">
+                </el-input>
+            </el-form-item>
+
+        </el-form>
+        <hr>
+        <el-button style="float:right;margin-right:3%" type="success" @click="updateHandel">填写工作周报</el-button>
+
+        <el-dialog title="编写工作周报" width='100%' :visible.sync="dialogTableVisible">
+            <el-form :model="updateReport" status-icon :rules="updateReportRule" ref="updateForm"
+                     label-width="100px" class="demo-ruleForm">
+                <el-form-item label="选择日期" >
+                    <el-select v-model="updateReportIndex" @change="updateReportChange" >
+                        <el-option
+                                v-for="(item,index) in updateReports"
+                                :label="item.createDate"
+                                :key="item.reportId"
+                                :value="index">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="工作周报" prop="report">
+                    <el-input
+
+                            type="textarea"
+                            :autosize="{ minRows: 6, maxRows: 8}"
+                            placeholder="请输入内容"
+                            v-model="updateReport.report">
+
+                    </el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="submitForm('updateForm')">提交</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+
+    </section>
+</div>
+<script>
+
+    var vm = new Vue({
+        el:'#app',
+        data:{
+            api:'',
+            dialogTableVisible:false,
+                reportIndex:'',
+                updateReportIndex:'',
+                reports:[{ reportId:'', userId:'', report:'', createDate:'', month:'', state:''}],
+                report:{ reportId:'', userId:'', report:'', createDate:'', month:'', state:''},
+                updateReports:[{ reportId:'', userId:'', report:'', createDate:'', month:'', state:''}],
+                updateReport:{ reportId:'', userId:'', report:'', createDate:'', month:'', state:''},
+                sysUser:'',
+                updateReportRule:{
+                    reportId:'',
+                    userId:'',
+                    report:[
+                        { required: true, message: '请输入周报', trigger: 'blur' }
+                        ],
+                    createDate:'',
+                    month:'',
+                    state:''
+                }
+        },
+        methods:{
+            reportChange(){
+                this.report = this.reports[this.reportIndex]
+            },
+            updateReportChange(){
+                this.updateReport = this.updateReports[this.updateReportIndex]
+            },
+            queryReport(){
+                console.log(this.api + '/queryReport?userId='+ this.sysUser.id + '&state=1')
+                axios.get( this.api + '/queryReport?userId='+ this.sysUser.id + '&state=1')
+                    .then((res)=>{
+                        console.log(res.data);
+                        this.reports = res.data;
+                        this.reports.unshift({ reportId:0, userId:'', report:'', createDate:'请选择', month:'', state:''})
+
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    });
+
+                axios.get( this.api + '/queryReport?userId='+ this.sysUser.id + '&state=0')
+                    .then((res)=>{
+                        console.log(res.data);
+                        this.updateReports = res.data;
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+            },
+            updateHandel(){
+
+                if (this.updateReports.length === 0){
+                    this.$message.warning('无周报需要填写')
+                }else {
+                    this.dialogTableVisible = true;
+                }
+            },
+            submitForm(formName){
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.updateReport.state = 1;
+
+                        let param = JSON.stringify(this.updateReport);
+                        demo.submitReport(param);
+                        this.dialogTableVisible = false;
+                        this.queryReport();
+
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                })
+            }
+
+        },
+        mounted(){
+            demo.initData1();
+        }
+    });
+
+    function getName( userJson ,api){
+        vm.sysUser = JSON.parse( userJson );
+        demo.dismissDialog();
+        vm.api = api;
+        vm.queryReport();
+    }
+</script>
+</body>
+</html>

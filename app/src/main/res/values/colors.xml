@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#fd262424</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="Dark_color">#262424</color>
+
+
+    <color name="red">@android:color/holo_red_dark</color>
+    <color name="green">@android:color/holo_green_light</color>
+    <color name="yellow">#f4f13e</color>
+    <color name="white">@android:color/white</color>
+    <color name="blue">@android:color/holo_blue_dark</color>
+    <color name="gary">@android:color/darker_gray</color>
+    <color name="text_color">#262625</color>
+
+    <!-- QRCode scanner color begin -->
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="result_view">#B0000000</color>
+    <color name="viewfinder_frame">#90FFFFFF</color>
+    <color name="result_point_color">#C0FFFF00</color>
+    <color name="laser_color">#0F0</color>
+    <color name="corner_color">#00FF00</color>
+    <!-- QRCode scanner color end -->
+
+</resources>

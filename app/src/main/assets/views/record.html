@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>new</title>
+    <link rel="stylesheet" href="../js/index.css">
+    <link rel="stylesheet" href="../js/bootstrap.css">
+    <script src="../js/vue.js"></script>
+    <script src="../js/element-ui.js"></script>
+    <script src="../js/jquery.js"></script>
+    <script src="../js/axios.js"></script>
+
+</head>
+<body>
+<div id="app">
+    <el-col :span="24">
+        <el-menu style="width: 100%;" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+            <el-menu-item index="1" style="width: 33%">所有隐患</el-menu-item>
+            <el-menu-item index="2" style="width: 33%">已整改隐患</el-menu-item>
+            <el-menu-item index="3" style="width: 33%">已复查隐患</el-menu-item>
+        </el-menu>
+    </el-col>
+    <hr>
+    <el-col :span="24">
+        <el-table
+                :data="dangerData"
+                style="width: 100%"
+                @row-click="rowClickView"
+                :v-loading="tableLoading">
+            <el-table-column prop="dangerName" label="隐患名称" style="width:40%"></el-table-column>
+            <el-table-column prop="dangerState" label="隐患状态" :formatter="stateForm" style="width:30%"></el-table-column>
+            <el-table-column label="操作" style="width:30%">
+                <template slot-scope="scope" >
+                    <el-button
+                            size="mini"
+                            v-if="isCom"
+                            type="warning"
+                            @click.stop.prevent="handleReview(scope.$index, scope.row)">复查
+                    </el-button>
+                    <el-button
+                            size="mini"
+                            type="success"
+                            v-if="isReform"
+                            @click.stop.prevent="handleEdit(scope.$index, scope.row)">整改
+                    </el-button>
+                    <el-button
+                            size="mini"
+                            type="primary"
+                            v-if="isView"
+                            @click.stop.prevent="handleView(scope.$index, scope.row)">查看
+                    </el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+    </el-col>
+</div>
+
+<script>
+    var vm = new Vue({
+        el:'#app',
+        data:{
+            api:'',
+            activeIndex: '1',
+            dangerData:[],
+            tableLoading:false,
+            urlParam:'',
+            isCom:false,
+            isReform:false,
+            isView:false,
+            user:'',
+        },
+        methods:{
+            handleSelect(index,indexPath){
+                this.tableLoading = true;
+                  let url='';
+                  if (index == 1 ) {
+
+                    url = this.api+'/queryDanger'+this.urlParam;
+                  }
+                  if (index == 2 ) {
+                  this.isCom = true
+                  this.isReform = false
+                  this.isView = false
+                    url = this.api+'/queryDanger'+this.urlParam+'&dangerState=2';
+                  }
+                  if (index == 3 ) {
+                  this.isCom = false
+                  this.isReform = false
+                  this.isView = true
+                    url = this.api+'/queryDanger'+this.urlParam+'&dangerState=3';
+                  }
+                  axios.get(url)
+                    .then((res) =>{
+
+                      this.dangerData= res.data;
+                      this.tableLoading = false;
+                    })
+                    .catch(function (error) {
+
+                    })
+            },
+            queryAllDanger(){
+                this.tableLoading = true;
+                console.log(this.api+'/queryDanger'+this.urlParam)
+                axios.get(this.api+'/queryDanger'+this.urlParam)
+                    .then((res) =>{
+                      this.dangerData= res.data;
+                      this.tableLoading = false;
+                      demo.dismissDialog();
+                    })
+                    .catch(function (error) {
+
+                    })
+            },
+            handleEdit(index,row){
+                if( this.user.identify ===3 ){
+
+                    demo.editRecord( JSON.stringify( row ) )
+                }
+                else{
+                    demo.tip();
+                }
+            },
+            handleReview(index,row){
+                if( this.user.identify ===3 || this.user.identify ===1 || this.user.identify ===0){
+                    demo.tip();
+                }
+                else{
+                    demo.reviewRecord( JSON.stringify( row ) )
+                }
+            },
+            handleView(index,row){
+                demo.viewRecord( JSON.stringify( row ) )
+            },
+            rowClickView(row, column, event){
+                demo.viewRecord( JSON.stringify( row ) )
+            },
+            stateForm(row, column){
+              //0:超期未整改，1：未整改，2：已整改
+
+              if( row.dangerState < 2 )
+              {
+                  this.isCom = false
+                  this.isReform = true
+                  this.isView = false
+                  if( row.dangerState === 0 )
+                  {
+                        this.isCom = false
+                        this.isReform = false
+                        this.isView = true
+                        return '超期未整改'
+                  }else{
+                    return '未整改'
+                  }
+              }
+              else if( row.dangerState === 2 )
+              {
+                  this.isCom = true
+                  this.isReform = false
+                  this.isView = false
+                  return '已整改'
+
+              }else {
+                  this.isCom = false
+                  this.isReform = false
+                  this.isView = true
+                  return '已复查'
+
+              }
+
+            }
+        },
+        mounted(){
+        },
+    });
+
+    function setQueryUrlParam(value,api){
+        vm.api = api;
+        vm.urlParam = value
+        vm.queryAllDanger();
+    }
+
+    function setUser(user){
+        vm.user = JSON.parse( user )
+    }
+
+</script>
+</body>
+</html>

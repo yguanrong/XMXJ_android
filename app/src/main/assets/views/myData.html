@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>new</title>
+    <link rel="stylesheet" href="../js/index.css">
+    <link rel="stylesheet" href="../js/bootstrap.css">
+    <script src="../js/vue.js"></script>
+    <script src="../js/element-ui.js"></script>
+    <script src="../js/jquery.js"></script>
+    <script src="../js/axios.js"></script>
+
+</head>
+<body>
+<div id="app">
+
+    <br>
+    <el-form ref="form"  :data="user" label-width="80px">
+        <el-form-item label="头像">
+            <img
+                 :src="userImg"
+                 style="width: 100px; height: 100%; border-radius: 25px; float:right;margin-right: 5%"
+                 @click="updateImg">
+            </img>
+        </el-form-item>
+
+        <el-form-item label="用户名">
+            <el-input :disabled="true"
+                      v-model="user.name"
+                      style="width: 95%"></el-input>
+        </el-form-item>
+        <el-form-item label="公 司">
+            <el-select :disabled="true" v-model="user.company_id" style="width: 95%;" >
+                <el-option
+                        v-for="item in companys"
+                        :label="item.name"
+                        :key="item.id"
+                        :value="item.id">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="身份">
+            <el-select v-model="user.identify" :disabled="true" style="width: 95%;">
+                <el-option
+                        v-for="item in identifys"
+                        :label="item.value"
+                        :value="item.key"
+                        :key="item.key">
+
+                </el-option>
+            </el-select>
+        </el-form-item>
+    </el-form>
+    <p style="margin-left:20px">负责项目</p>
+    <hr>
+
+    <el-button @click="logout" type="danger"
+               style="margin-top:10px;float:right;margin-right:20px">
+        退出登录
+    </el-button>
+
+    <el-dialog
+            title="图片"
+            :visible.sync="dialogVisible"
+            width="100%">
+        <img :src="dialogImg" style="width: 90%;">
+        <span slot="footer" class="dialog-footer">
+        <el-button @click="changeImg">更换头像</el-button>
+        </span>
+    </el-dialog>
+</div>
+<script>
+    var api = "";
+    var imgUrl = ""
+    var vm = new Vue({
+        el:'#app',
+        data:{
+            user: {
+                api:'',
+                imgUrl:'',
+                id:'',
+                name:'sascacsa',
+                password:'',
+                identify:1,
+                company_id: '',
+                img:'',
+            },
+            companys:[{id:'', name:'', faren:'', type:''}],
+            identifys:[
+                {key: 0, value:'管理员'},
+                {key: 1, value:'项目经理'},
+                {key: 2, value:'安全员'},
+                {key: 3, value:'责任人'},
+            ],
+            items:[],
+            userImg:'',
+            dialogVisible:false,
+            dialogImg:'',
+        },
+        methods:{
+            logout(){
+
+                demo.logout();
+
+            },
+            companyForm( row, col ){
+
+                for(let i = 0; i<this.companys.length();i++)
+                {
+                    if(this.companys[i].id == row.companyId)
+                    {
+                        return this.companys[i].name
+                    }
+                }
+            },
+            updateImg(){
+                this.dialogVisible = true;
+                this.dialogImg = this.userImg;
+            },
+            changeImg(){
+                this.dialogVisible = false;
+                demo.showChoseCam();
+            },
+            setUserImg(path){
+                //alert(path);
+                this.userImg = path+"";
+                //this.userImg = 'http://119.23.73.235:88/upload/phone_upload/21afd454-8273-4f95-876a-35ace985a5e0.jpg'
+            },
+        },
+        mounted(){
+            demo.initData();
+        }
+    });
+
+    function initData(userJson, companyJson, itemJson, api, imgUrl){
+
+        vm.user = JSON.parse( userJson );
+        vm.companys = JSON.parse( companyJson );
+        vm.items = JSON.parse( itemJson );
+        vm.api = api;
+        vm.imgUrl = imgUrl;
+        demo.dismissDialog();
+        vm.setUserImg(vm.imgUrl+vm.user.img);
+    }
+
+    function getPic(path){
+        vm.setUserImg(path);
+    }
+
+
+
+</script>
+</body>
+</html>

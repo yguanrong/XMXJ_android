@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>new</title>
+    <link rel="stylesheet" href="../js/index.css">
+    <link rel="stylesheet" href="../js/bootstrap.css">
+    <script src="../js/vue.js"></script>
+    <script src="../js/element-ui.js"></script>
+    <script src="../js/jquery.js"></script>
+    <script src="../js/echarts.min.js"></script>
+    <script src="../js/axios.js"></script>
+
+</head>
+<body>
+<div id="app" >
+    <el-col :span="24" >
+        <div id="chartBar" style="width:100%; height:500px;"></div>
+    </el-col>
+</div>
+
+<script>
+
+    var vm = new Vue({
+        el:'#app',
+        data:{
+            api:'',
+            chartBar: null,
+            dangerCompany: [ ],
+            overdueData:[],
+            sumData:[],
+        },
+        methods:{
+            drawBarChart() {
+                this.chartBar = echarts.init(document.getElementById('chartBar'));
+                this.chartBar.setOption({
+                    title: {
+                        text: '分包公司分析',
+                        left: '3%',
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    },
+                    legend: {
+                        data: ['超期未整改', '总数'],
+                        bottom: 'bottom',
+                        left: '8%'
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '5%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'value',
+                        boundaryGap: [0, 0.01]
+                    },
+                    yAxis: {
+                        type: 'category',
+                        data: this.dangerCompany,
+
+                    },
+                    series: [
+                        {
+                            name: '超期未整改',
+                            type: 'bar',
+                            data: this.overdueData,
+
+                        },
+                         {
+                            name: '总数',
+                            type: 'bar',
+                            data: this.sumData,
+                            color: 'rgb(30, 144, 255)'
+                        }
+                    ]
+                });
+            },
+            setData(){
+
+                axios.get( this.api +'/queryCountForCompany')
+                    .then((res)=>{
+                        this.dangerCompany = res.data[0].dangerCompany
+                        this.overdueData = res.data[0].overdueData
+                        this.sumData = res.data[0].sumData
+                        this.drawBarChart();
+                    })
+                    .catch((error) =>{
+                        console.log(error)
+                    })
+            }
+        },
+        mounted(){
+            demo.initData();
+        }
+
+    });
+
+    function seteData(api){
+        vm.api = api;
+        vm.setData();
+    }
+</script>
+</body>
+</html>

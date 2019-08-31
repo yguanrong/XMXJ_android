@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>new</title>
+    <link rel="stylesheet" href="../js/index.css">
+    <link rel="stylesheet" href="../js/bootstrap.css">
+    <script src="../js/vue.js"></script>
+    <script src="../js/element-ui.js"></script>
+    <script src="../js/jquery.js"></script>
+    <script src="../js/axios.js"></script>
+
+</head>
+<body>
+<div id="app">
+    <hr>
+    <el-form :disabled="true"  label-width="80px">
+        <el-form-item label="责任区域">
+            <el-select v-model="danger.dangerAreaId" placeholder="请选择责任区域" style="width: 95%">
+                <el-option v-for="item in dangerAreas"
+                           :value="item.id"
+                           :label="item.name"
+                           :key="item.id">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="分包单位">
+            <el-select v-model="danger.companyId" placeholder="请选择分包单位" style="width: 95%">
+                <el-option v-for="item in company"
+                           :value="item.id"
+                           :label="item.name"
+                           :key="item.id">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="隐患类别">
+            <el-select v-model="danger.dangerType" placeholder="请选择安全隐患" style="width: 95%">
+                <el-option v-for="item in dangerTypes"
+                           :value="item.id"
+                           :label="item.name"
+                           :key="item.id">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="责任人">
+            <el-select v-model="danger.zhenggaiPId" placeholder="请选择整改人" style="width: 95%">
+                <el-option v-for="item in users"
+                           :value="item.id"
+                           :label="item.name"
+                           :key="item.id">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="隐患说明">
+            <el-input type="textarea" v-model="danger.dangerDec" style="width: 95%"></el-input>
+        </el-form-item>
+        <el-form-item label="整改要求">
+            <el-input type="textarea" v-model="danger.zhenggaiDec" style="width: 95%"></el-input>
+        </el-form-item>
+        <el-form-item label="紧急级别">
+            <el-radio-group v-model="danger.dangerLevel" style="width: 95%">
+                <el-radio :label=1 >一般</el-radio>
+                <el-radio :label=2 >严重</el-radio>
+                <el-radio :label=3 >紧要</el-radio>
+            </el-radio-group>
+        </el-form-item>
+        <el-form-item label="整改时限">
+            <el-date-picker type="date" placeholder="选择日期" v-model="danger.limitTime" style="width: 95%;">
+            </el-date-picker>
+        </el-form-item>
+        <el-form-item label="整改时间">
+            <el-date-picker type="date" placeholder="选择日期" v-model="danger.updateTime" style="width: 95%;">
+            </el-date-picker>
+        </el-form-item>
+        <el-form-item label="整改要求">
+            <el-input type="textarea" v-model="danger.zhenggaiDec" style="width: 95%"></el-input>
+        </el-form-item>
+        <el-form-item label="整改日志">
+            <el-input type="textarea" v-model="danger.zhenggaiLog" style="width: 95%"></el-input>
+        </el-form-item>
+    </el-form>
+
+    <el-form ref="form" :disabled="isView" :data="danger" label-width="80px">
+        <el-form-item label="隐患名称">
+
+            <el-input v-if="isFromRecord" :disabled="true"
+                      v-model="danger.dangerName"
+                      style="width: 95%"></el-input>
+
+            <el-select v-else v-model="dangerIndex"
+                       style="width: 95%" @change="setData" placeholder="请选择隐患名称">
+                <el-option
+                        v-for="(item,index) in dangers"
+                        :key="item.dangerId"
+                        :label="item.dangerName"
+                        :value="index">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="复查日志">
+            <el-input type="textarea" v-model="danger.reviewLog" style="width: 95%"></el-input>
+        </el-form-item>
+        <el-form-item label="复查结果">
+            <el-radio-group v-model="danger.dangerState">
+                <el-radio :label=3>整改合格</el-radio>
+                <el-radio :label=-1>整改不合格</el-radio>
+            </el-radio-group>
+        </el-form-item>
+    </el-form>
+    <hr>
+    <el-row>
+        <el-col :span="12">
+            <p style="margin-left:30px">
+                整改前照片
+            </p>
+        </el-col>
+        <el-col :span="12">
+            <p style="margin-left:30px">
+                整改后照片
+            </p>
+        </el-col>
+    </el-row>
+    <hr>
+    <el-row>
+        <el-col :span="12">
+            <img :src="dangerImg" @click="preView(1)" style="height: 80px;margin-left:30px"/>
+            <br>
+            <el-button @click="queryPhoto(1)"
+                       size="mini"
+                       style="margin-left: 30px;margin-top: 5px"
+                       type="primary" >查看</el-button>
+        </el-col>
+        <el-col :span="12">
+            <img :src="imgSrc" @click="preView(2)" style="height: 80px;margin-left: 30px"/>
+            <br>
+            <el-button @click="queryPhoto(2)"
+                       type="primary"
+                       style="margin-left: 30px;margin-top: 5px"
+                       size="mini" >查看</el-button>
+        </el-col>
+    </el-row>
+    <hr>
+
+    <el-dialog
+            title="图片"
+            :visible.sync="dialogVisible"
+            width="100%">
+        <img :src="dialogImg" style="width: 98%;">
+        <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">关 闭</el-button>
+        </span>
+    </el-dialog>
+
+</div>
+
+<script>
+
+    var vm = new Vue({
+        el:'#app',
+        data:{
+            api:'',
+            imgUrl:'',
+            danger: {
+              dangerId:'',
+              dangerName:'',
+              dangerAreaId:'',
+              companyId:'',
+              dangerType:'',
+              dangerDec:'',
+              zhenggaiDec:'',
+              dangerState:3,
+              itemId:'',
+              dangerLevel:'',
+              limitTime:'',
+              updateTime:'',
+              zhenggaiLog:'',
+              createImg:'',
+              updateImg:'',
+              zhenggaiPId:'',
+              createPId:'',
+              reviewPId:'',
+              reviewLog:'',
+              reviewTime:''
+            },
+            users:{},
+            dangerAreas:[
+              {id:'1', name:'无数据'}
+            ],
+            company:[
+              {id:'1', name:'无数据'}
+            ],
+            dangerTypes:[
+              {id:'1',name:'无数据'}
+            ],
+            isFromRecord:false,
+            isView: false,
+            dangerIndex:'',
+            dangers:[
+              {id:'1', dangerName:'无数据'}
+            ],
+            dangerImg:'',
+            dialogImg:'',
+            userId:'',
+            imgSrc:'',
+            dialogVisible:false,
+        },
+        methods:{
+        //查找用户
+            queryUser(){
+
+                axios.get(this.api+'/queryUser')
+                    .then((res) =>{
+                        this.users = res.data;
+
+                    })
+                    .catch(function (error) {
+
+                    })
+            },
+            //预览图片
+            preView(index){
+                this.dialogVisible = true;
+                if(index === 1 && this.dangerImg !== ''){
+                    this.dialogImg = this.dangerImg;
+                }
+                else if(this.imgSrc !== ''){
+                    this.dialogImg = this.imgSrc;
+                }
+            },
+            //点击查看隐患照片
+            queryPhoto(index){
+                if(this.danger.dangerId == '')
+                {
+                    this.$message.warning("请先选择要整改的隐患")
+                }
+                else{
+                    axios.get(this.api+'/queryDangerImg?dangerId='+this.danger.dangerId+'&flag='+index)
+                    .then((res) =>{
+                        if(res.data.state == 1)
+                        {
+                            if(index == 1){
+                                this.dangerImg = this.imgUrl + res.data.msg
+                            }
+                            else{
+                                this.imgSrc = this.imgUrl + res.data.msg
+                            }
+
+                        }else
+                        {
+                            this.$message.warning("无图片可以查看")
+                        }
+
+                    })
+                    .catch(function (error) {
+
+                    })
+                }
+            },
+            setData(){
+                this.danger = this.dangers[this.dangerIndex]
+            },
+        },
+
+    });
+
+    function getPic(path){
+        vm.imgSrc = path;
+    }
+
+    function submit(){
+        //vm.danger.dangerState = 3
+        vm.danger.reviewPId = vm.userId
+        demo.review( JSON.stringify(vm.danger) )
+    }
+
+    function intData(dangers){
+        vm.dangers = JSON.parse( dangers );
+    }
+
+    function initData(dangerAreas,dangerTypes,company,userId,api,imgUrl){
+
+        vm.api = api;
+        vm.imgUrl = imgUrl;
+        vm.dangerAreas=JSON.parse(dangerAreas);
+        vm.dangerTypes=JSON.parse(dangerTypes);
+        vm.company=JSON.parse(company);
+        vm.userId = userId;
+        vm.queryUser();
+    }
+
+    function setDangerData( dangerJson ,isView){
+        vm.danger = JSON.parse( dangerJson );
+        vm.isFromRecord = true;
+        if(isView == 1)
+        {
+            vm.isView = true
+        }
+    }
+</script>
+</body>
+</html>

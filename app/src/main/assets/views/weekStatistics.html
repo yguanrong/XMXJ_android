@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>new</title>
+    <link rel="stylesheet" href="../js/index.css">
+    <link rel="stylesheet" href="../js/bootstrap.css">
+    <script src="../js/vue.js"></script>
+    <script src="../js/element-ui.js"></script>
+    <script src="../js/jquery.js"></script>
+    <script src="../js/echarts.min.js"></script>
+
+</head>
+<body>
+<div id="app" style="width:100%;">
+        <div id="chartLine" style="width:100%; height:350px;"></div>
+</div>
+
+<script>
+
+    var vm = new Vue({
+        el:'#app',
+        data:{
+            chartLine: null,
+            dateData: [],
+            importantDanger: [],
+            seriousDanger: [],
+            commonDanger: [],
+            dangerSum: [],
+        },
+        methods:{
+            drawLineChart() {
+                this.chartLine = echarts.init(document.getElementById('chartLine'));
+                this.chartLine.setOption({
+                    title: {
+                        text: '最近七天隐患分析',
+                        left: '3%',
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data: ['紧要隐患', '严重隐患', '一般隐患', '隐患总数'],
+                        orient: "vertical", //垂直显示
+                        right:'4%',   //右邊距
+                    },
+                    grid: {
+                        top: '25%',
+                        left: '3%',
+                        right: '5%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: this.dateData
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            name: '紧要隐患',
+                            type: 'line',
+                            data: this.importantDanger,
+                            color:'rgb(205,0,0)'
+                        },
+                        {
+                            name: '严重隐患',
+                            type: 'line',
+                            data: this.seriousDanger,
+                            color:'rgb(255,165,0)'
+                        },
+                        {
+                            name: '一般隐患',
+                            type: 'line',
+                            data: this.commonDanger,
+                            color:'rgb(50,205,50)'
+                        },
+                        {
+                            name: '隐患总数',
+                            type: 'line',
+                            data: this.dangerSum,
+                            color:'rgb(0,0,238)'
+                        }
+                    ]
+                });
+
+            },
+        },
+        mounted(){
+            demo.dismissDialog()
+        }
+    });
+
+    function seteData(importantDanger,seriousDanger,commonDanger,dangerSum,dates){
+
+            vm.dateData = dates.replace('[','').replace(']','').split(',');
+            vm.importantDanger = JSON.parse(importantDanger);
+            vm.seriousDanger = JSON.parse(seriousDanger);
+            vm.commonDanger = JSON.parse(commonDanger);
+            vm.dangerSum = JSON.parse(dangerSum);
+            vm.drawLineChart();
+    }
+</script>
+</body>
+</html>

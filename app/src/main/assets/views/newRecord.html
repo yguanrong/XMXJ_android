@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>new</title>
+    <link rel="stylesheet" href="../js/index.css">
+    <link rel="stylesheet" href="../js/bootstrap.css">
+    <script src="../js/vue.js"></script>
+    <script src="../js/element-ui.js"></script>
+    <script src="../js/jquery.js"></script>
+
+</head>
+<body>
+<div id="app">
+    <hr>
+    <el-form ref="form" :data="newDanger" label-width="80px">
+        <el-form-item label="隐患名称">
+            <el-input v-model="newDanger.dangerName" placeholder="隐患名称" style="width: 95%">
+            </el-input>
+        </el-form-item>
+        <el-form-item label="责任区域">
+            <el-select v-model="newDanger.dangerAreaId" placeholder="请选择责任区域" style="width: 95%">
+                <el-option v-for="item in dangerAreas"
+                           :value="item.id"
+                           :label="item.name"
+                           :key="item.id">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="分包单位">
+            <el-select v-model="newDanger.companyId" @change="companyChange" placeholder="请选择分包单位" style="width: 95%">
+                <el-option v-for="item in company"
+                           :value="item.id"
+                           :label="item.name"
+                           :key="item.id">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="项目名称">
+            <el-select v-model="newDanger.itemId" placeholder="请选择所属项目" style="width: 95%">
+                <el-option v-for="item in items"
+                           :value="item.id"
+                           :label="item.name"
+                           :key="item.id">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="隐患类别">
+            <el-select v-model="newDanger.dangerType" placeholder="请选择安全隐患" style="width: 95%">
+                <el-option v-for="item in dangerTypes"
+                           :value="item.id"
+                           :label="item.name"
+                           :key="item.id">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="隐患说明">
+            <el-input type="textarea" v-model="newDanger.dangerDec" style="width: 95%"></el-input>
+        </el-form-item>
+        <el-form-item label="整改要求">
+            <el-input type="textarea" v-model="newDanger.zhenggaiDec" style="width: 95%"></el-input>
+        </el-form-item>
+        <el-form-item label="紧急级别">
+            <el-radio-group v-model="newDanger.dangerLevel" style="width: 95%">
+                <el-radio :label=1 >一般</el-radio>
+                <el-radio :label=2 >严重</el-radio>
+                <el-radio :label=3 >紧要</el-radio>
+            </el-radio-group>
+        </el-form-item>
+        <el-form-item label="整改时限">
+            <el-date-picker type="date" placeholder="选择日期" v-model="newDanger.limitTime" style="width: 95%;">
+            </el-date-picker>
+        </el-form-item>
+        <el-form-item label="责任人">
+            <el-select v-model="newDanger.zhenggaiPId" placeholder="请选择整改人" style="width: 95%">
+                <el-option v-for="item in userBycompanyid"
+                           :value="item.id"
+                           :label="item.name"
+                           :key="item.id">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <hr>
+        <p style="margin-left:20px">
+            现场照片
+        </p>
+        <hr>
+        <el-row>
+            <el-col :span="12">
+                <img :src="imgSrc" @click="preView(2)" style="height: 80px;margin-left: 20px"/>
+            </el-col>
+            <el-col :span="12">
+                <img src="../img/xiangji2.png" @click="takePhoto" style="width:80px;margin-left: 20px" >
+            </el-col>
+        </el-row>
+        <hr>
+
+    </el-form>
+
+    <el-dialog
+            title="图片"
+            :visible.sync="dialogVisible"
+            width="100%">
+        <img :src="dialogImg" style="width: 98%;">
+        <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">关 闭</el-button>
+        </span>
+    </el-dialog>
+
+</div>
+
+<script>
+    var vm = new Vue({
+        el:'#app',
+        data:{
+            newDanger: {
+              dangerName: '',
+              dangerAreaId: '',
+              companyId: '',
+              dangerType: '',
+              dangerDec: '',
+              zhenggaiDec: '',
+              dangerState: 1,
+              itemId:'',
+              dangerLevel:'',
+              limitTime:'',
+              zhenggaiPId:'',
+              createPId:''
+            },
+            dangerAreas:[
+              {id:'1', name:'无数据'}
+            ],
+            company:[
+              {id:'1', name:'无数据'}
+            ],
+            items:[
+              {id:'1', name:'无数据'}
+            ],
+            dangerTypes:[
+              {id:'1',name:'无数据'}
+            ],
+            userBycompanyid:[
+              {id:'1', name:'无数据'}
+            ],
+            imgSrc:'',
+            dialogImg:'',
+            dialogVisible:false,
+
+
+        },
+        methods:{
+            preView(){
+                this.dialogVisible = true;
+                if(this.imgSrc !== ''){
+                    this.dialogImg = this.imgSrc;
+                }
+            },
+            takePhoto(){
+                demo.showChoseCam();
+            },
+            companyChange(){
+                demo.queryUserByCompany(this.newDanger.companyId)
+            },
+            submitRecord(){
+                if(this.imgSrc == '')
+                {
+                    this.$message.warning("拍摄或选择现场照片")
+                }else{
+                    demo.addNewDanger( JSON.stringify(this.newDanger) )
+                }
+            }
+        },
+        watch:{
+            'newDanger.companyId': function (val, oldVal){
+                demo.queryUserByCompany(this.newDanger.companyId)
+            }
+        },
+        mounted(){
+            demo.dismissDialog()
+        }
+
+
+    });
+
+    function setCreateUserId( userId){
+        vm.newDanger.createPId = userId;
+    }
+
+    function getPic(path){
+        vm.imgSrc = path;
+    }
+
+    function submit(){
+
+        vm.submitRecord();
+    }
+
+    function initData(dangerAreas,dangerTypes,company,items){
+        vm.dangerAreas=JSON.parse(dangerAreas);
+        vm.dangerTypes=JSON.parse(dangerTypes);
+        vm.company=JSON.parse(company);
+        vm.items=JSON.parse(items);
+    }
+
+    function initUser(users){
+        vm.userBycompanyid=JSON.parse(users);
+    }
+
+    function setEditData( dangerJson ){
+        vm.newDanger=JSON.parse( dangerJson );
+
+    }
+
+</script>
+</body>
+</html>

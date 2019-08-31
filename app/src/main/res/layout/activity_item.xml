@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/home_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ef262424"
+            android:fitsSystemWindows="true">
+
+            <TextView
+                android:id="@+id/hy_xm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:singleLine="true"
+                android:text="施工安全管理系统"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:visibility="visible"/>
+        </android.support.v7.widget.Toolbar>
+
+    </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp">
+        </View>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#4f895b">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="添加项目到个人"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:id="@+id/title"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:gravity="center">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:textSize="20sp"
+                        android:layout_marginStart="20dp"
+                        android:textColor="#e70011ff"
+                        android:text="@string/user"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginStart="10dp"
+                        android:text="张三"
+                        android:textSize="18sp"
+                        android:textColor="@android:color/black"
+                        android:id="@+id/user_name"
+                        android:layout_marginLeft="10dp" />
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gary">
+
+                </View>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:gravity="center"
+                        android:text="选择项目："
+                        android:textColor="@color/Dark_color"/>
+                    <!--最简单的加载下拉数组：entries，内容定义在string-array中-->
+                    <Spinner
+                        android:id="@+id/spinner_item"
+                        android:textAlignment="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="20dp"
+                        android:entries="@array/spinner_item"
+                        android:layout_marginStart="20dp" />
+
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gary">
+
+                </View>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:stretchColumns="*"
+                    android:divider="@drawable/line_h"
+                    android:showDividers="beginning|middle|end"
+                    android:orientation="vertical">
+                    <TableRow
+                        android:divider="@drawable/line_h"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:padding="8dp"
+                            android:layout_width="1dp"
+                            android:gravity="center"/>
+                        <TextView
+                            android:padding="8dp"
+                            android:layout_width="1dp"
+                            android:text="添加项目"
+                            android:gravity="center"/>
+                    </TableRow>
+                    <TableRow
+                        android:divider="@drawable/line_h"
+                        android:showDividers="beginning|middle|end"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:padding="8dp"
+                            android:layout_width="1dp"
+                            android:text="公司"
+                            android:gravity="center"/>
+                        <TextView
+                            android:padding="8dp"
+                            android:layout_width="1dp"
+                            android:text="项目"
+                            android:gravity="center"/>
+                        <TextView
+                            android:padding="8dp"
+                            android:layout_width="1dp"
+                            android:gravity="center"
+                            android:text="操作"/>
+                    </TableRow>
+                    <TableRow
+                        android:divider="@drawable/line_h"
+                        android:showDividers="beginning|middle|end">
+                        <TextView
+                            android:padding="8dp"
+                            android:layout_width="1dp"
+                            android:text="公司1"
+                            android:id="@+id/company1"
+                            android:gravity="center"/>
+                        <TextView
+                            android:padding="8dp"
+                            android:layout_width="1dp"
+                            android:text="项目1"
+                            android:id="@+id/item1"
+                            android:gravity="center"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center">
+                            <Button
+                                android:layout_width="70dp"
+                                android:layout_height="wrap_content"
+                                android:text="删除"
+                                android:textColor="@color/white"
+                                android:background="@drawable/saoyisao_shape"/>
+                        </LinearLayout>
+                    </TableRow>
+                    <TableRow
+                        android:divider="@drawable/line_h"
+                        android:showDividers="beginning|middle|end">
+                        <TextView
+                            android:padding="8dp"
+                            android:layout_width="1dp"
+                            android:text="公司2"
+                            android:gravity="center"/>
+                        <TextView
+                            android:padding="8dp"
+                            android:layout_width="1dp"
+                            android:text="项目2"
+                            android:gravity="center"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center">
+                            <Button
+                                android:layout_width="70dp"
+                                android:layout_height="wrap_content"
+                                android:text="删除"
+                                android:textColor="@color/white"
+                                android:background="@drawable/saoyisao_shape"/>
+                        </LinearLayout>
+                    </TableRow>
+
+                </TableLayout>
+
+            </LinearLayout>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="注册项目"
+                    android:textSize="15sp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:id="@+id/registerItem_btn"
+                    android:background="@drawable/xiangce_shape"
+                    android:layout_marginEnd="30dp"
+                    android:textColor="@color/white"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

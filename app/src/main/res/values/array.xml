@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="es">
+        <item>项目名称</item>
+        <item>项目A</item>
+        <item>项目B</item>
+    </string-array>
+    <string-array name="spinner_company">
+        <item>公司名称</item>
+        <item>项目A</item>
+        <item>项目B</item>
+    </string-array>
+    <string-array name="spinner_company_part">
+        <item>分包公司名称</item>
+    </string-array>
+    <string-array name="spinner_item">
+        <item>项目名称</item>
+    </string-array>
+
+</resources>
